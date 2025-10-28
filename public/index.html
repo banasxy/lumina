@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumina - Login</title>
+  <style>
+    :root {
+      --azul-oscuro: #1A3C78;
+      --azul-claro: #4A90E2;
+      --blanco: #FFFFFF;
+    }
+
+    body { 
+      font-family: Arial, sans-serif; 
+      display:flex; 
+      justify-content:center; 
+      align-items:center; 
+      height:100vh; 
+      background: var(--azul-oscuro); 
+      color: var(--blanco);
+    }
+
+    #login-container { 
+      background: var(--azul-claro); 
+      padding:2rem; 
+      border-radius:12px; 
+      box-shadow:0 0 10px rgba(0,0,0,0.3); 
+      text-align:center; 
+      width: 300px;
+    }
+
+    input { 
+      margin:0.5rem 0; 
+      padding:0.5rem; 
+      width:100%; 
+      font-size:1rem; 
+      border: none; 
+      border-radius: 6px;
+    }
+
+    button { 
+      padding:0.5rem 1rem; 
+      font-size:1rem; 
+      margin-top:1rem; 
+      width:100%; 
+      cursor:pointer; 
+      background: var(--azul-oscuro); 
+      color: var(--blanco); 
+      border:none; 
+      border-radius:6px; 
+    }
+
+    button:hover { 
+      background: #0f2a5a; 
+    }
+
+    #error { 
+      color: #ff6b6b; 
+      font-size:0.9rem; 
+      margin-top:0.5rem; 
+    }
+  </style>
+</head>
+<body>
+  <div id="login-container">
+    <h2>Lumina</h2>
+    <input type="text" id="username" placeholder="Usuario">
+    <input type="password" id="pin" placeholder="PIN">
+    <button onclick="login()">Entrar</button>
+    <div id="error"></div>
+  </div>
+
+  <script>
+    const USER = "Benjamin"; // usuario fijo
+    const PIN = "2580";      // PIN fijo
+
+    function login() {
+      const username = document.getElementById("username").value;
+      const pin = document.getElementById("pin").value;
+      const error = document.getElementById("error");
+
+      if(username === USER && pin === PIN){
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "app.html";
+      } else {
+        error.textContent = "Usuario o PIN incorrecto";
+      }
+    }
+
+    if(localStorage.getItem("loggedIn") === "true"){
+      window.location.href = "app.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware para leer datos de formularios
 app.use(express.urlencoded({ extended: true }));
@@ -50,4 +50,4 @@ app.get('/', (req, res) => {
     res.send('Servidor funcionando. <a href="/register">Registrarse</a> | <a href="/login">Login</a>');
 });
 
-app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));

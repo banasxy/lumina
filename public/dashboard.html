@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <title>Dashboard - Lumina</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Bienvenido al Dashboard</h1>
-    <p id="welcome"></p>
-    <a href="/login">Cerrar sesión</a>
+  <h1>Panel de Lumina</h1>
+  <p id="welcome">Cargando usuario...</p>
 
-    <script>
-        // Tomar el parámetro ?user=usuario de la URL
-        const params = new URLSearchParams(window.location.search);
-        const user = params.get('user') || 'Invitado';
-        document.getElementById('welcome').innerText = `¡Hola, ${user}!`;
-    </script>
+  <a href="/app">Ir a la App</a> | 
+  <a href="/tutorial">Ver Tutorial</a> | 
+  <a href="/logout">Cerrar Sesión</a>
+
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,69 +1,83 @@
 const express = require('express');
 const path = require('path');
-const app = express();
+const session = require('express-session');
+const Database = require('./db');
 
-// Puerto dinámico para Render o local
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware para leer formularios
+const db = new Database(path.join(__dirname, 'usuarios.json'));
+
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Archivos estáticos (CSS, JS, imágenes)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// "Base de datos" simple en memoria
-let users = [];
+// Configurar sesión
+app.use(session({
+  secret: 'lumina_secret_key',
+  resave: false,
+  saveUninitialized: true
+}));
 
-// Página principal
+// Rutas principales
 app.get('/', (req, res) => {
-    res.send(`
-        <h1>Servidor Lumina funcionando</h1>
-        <a href="/register">Registrarse</a> | <a href="/login">Login</a>
-    `);
+  res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-// Página de registro
+// Registro
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/register.html'));
+  res.sendFile(path.join(__dirname, 'public/register.html'));
 });
 
-// Registrar usuario
 app.post('/register', (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) return res.send('Faltan datos');
+  const { username, password } = req.body;
+  if (!username || !password) return res.send('Faltan datos.');
 
-    if (users.find(u => u.username === username)) {
-        return res.send('Usuario ya existe. <a href="/register">Volver</a>');
-    }
+  const users = db.getUsers();
+  if (users.find(u => u.username === username))
+    return res.send('Usuario ya existe. <a href="/register">Volver</a>');
 
-    users.push({ username, password });
-    res.send('Usuario registrado correctamente. <a href="/login">Ir a login</a>');
+  db.addUser({ username, password });
+  res.redirect('/login');
 });
 
-// Página de login
+// Login
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/login.html'));
+  res.sendFile(path.join(__dirname, 'public/login.html'));
 });
 
-// Iniciar sesión
 app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === password);
+  const { username, password } = req.body;
+  const users = db.getUsers();
+  const user = users.find(u => u.username === username && u.password === password);
 
-    if (user) {
-        // Redirige al dashboard
-        res.redirect(`/dashboard?user=${encodeURIComponent(username)}`);
-    } else {
-        res.send('Usuario o contraseña incorrecta. <a href="/login">Volver</a>');
-    }
+  if (!user)
+    return res.send('Usuario o contraseña incorrecta. <a href="/login">Volver</a>');
+
+  req.session.user = username;
+  res.redirect('/dashboard');
 });
-
 
 // Dashboard
 app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/dashboard.html'));
+  if (!req.session.user) return res.redirect('/login');
+  res.sendFile(path.join(__dirname, 'public/dashboard.html'));
 });
 
-// Servidor escuchando
-app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+// Obtener usuario en sesión
+app.get('/getUser', (req, res) => {
+  res.json({ user: req.session.user || null });
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});
+
+// Páginas adicionales
+app.get('/app', (req, res) => res.sendFile(path.join(__dirname, 'public/app.html')));
+app.get('/tutorial', (req, res) => res.sendFile(path.join(__dirname, 'public/tutorial.html')));
+
+app.listen(PORT, () => console.log(`✅ Lumina corriendo en http://localhost:${PORT}`));

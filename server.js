@@ -1,42 +1,53 @@
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
-
 const app = express();
-const PORT = process.env.PORT || 3000; // Render asigna el puerto automáticamente
+const PORT = 3000;
 
-// Para leer JSON del frontend
-app.use(bodyParser.json());
+// Middleware para leer datos de formularios
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// Servir archivos estáticos de la carpeta 'public'
+// Servir archivos estáticos (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// "Base de datos" temporal en memoria
+// "Base de datos" simple en memoria
 let users = [];
 
-// Ruta principal
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Página de registro
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/register.html'));
 });
 
-// Registro
+// Registrar usuario
 app.post('/register', (req, res) => {
-  const { username, password } = req.body;
-  if (users.find(u => u.username === username)) {
-    return res.status(400).json({ message: 'Usuario ya existe' });
-  }
-  users.push({ username, password });
-  res.json({ message: 'Usuario registrado correctamente' });
+    const { username, password } = req.body;
+    if (users.find(u => u.username === username)) {
+        return res.send('Usuario ya existe');
+    }
+    users.push({ username, password });
+    res.send('Usuario registrado correctamente. <a href="/login">Ir a login</a>');
 });
 
-// Login
+// Página de login
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/login.html'));
+});
+
+// Iniciar sesión
 app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  const user = users.find(u => u.username === username && u.password === password);
-  if (!user) {
-    return res.status(400).json({ message: 'Usuario o contraseña incorrecta' });
-  }
-  res.json({ message: 'Inicio de sesión exitoso' });
+    const { username, password } = req.body;
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (user) {
+        res.send(`¡Bienvenido, ${username}!`);
+    } else {
+        res.send('Usuario o contraseña incorrecta. <a href="/login">Volver</a>');
+    }
 });
 
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+// Página principal
+app.get('/', (req, res) => {
+    res.send('Servidor funcionando. <a href="/register">Registrarse</a> | <a href="/login">Login</a>');
+});
+
+app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

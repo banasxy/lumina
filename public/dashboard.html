@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Bienvenido al Dashboard</h1>
+    <p id="welcome"></p>
+    <a href="/login">Cerrar sesión</a>
+
+    <script>
+        // Tomar el parámetro ?user=usuario de la URL
+        const params = new URLSearchParams(window.location.search);
+        const user = params.get('user') || 'Invitado';
+        document.getElementById('welcome').innerText = `¡Hola, ${user}!`;
+    </script>
+</body>
+</html>

@@ -59,16 +59,10 @@ app.post('/login', (req, res) => {
     }
 });
 
-// Dashboard simple
-app.get('/dashboard', (req, res) => {
-    const username = req.query.user;
-    if (!username) return res.redirect('/login');
 
-    res.send(`
-        <h1>Bienvenido, ${username}!</h1>
-        <p>Este es tu dashboard.</p>
-        <a href="/login">Cerrar sesión</a>
-    `);
+// Dashboard
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/dashboard.html'));
 });
 
 // Servidor escuchando

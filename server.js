@@ -1,10 +1,19 @@
 const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Para leer JSON del frontend
 app.use(bodyParser.json());
+
+// Servir archivos estáticos de la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
+// "Base de datos" temporal en memoria
+let users =[];
+ 
 // abrir/crear base de datos local
 const db = new Database(path.join(__dirname, 'lumina.db'));
 
@@ -35,29 +44,30 @@ db.prepare(`
 
 /* ---------- ENDPOINTS DE AUTENTICACIÓN / USUARIOS ---------- */
 
+// Ruta principal
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // register: { name, email, password }
-app.post('/api/register', (req, res) => {
+app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ error: 'email y password requeridos' });
-  try {
-    const stmt = db.prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
-    const info = stmt.run(name || '', email, password);
-    const user = db.prepare('SELECT id, name, email, tutorialSeen FROM users WHERE id = ?').get(info.lastInsertRowid);
-    res.status(201).json({ user });
-  } catch (err) {
-    if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(409).json({ error: 'email ya registrado' });
-    console.error(err);
-    res.status(500).json({ error: 'error interno' });
+  if (user.find(u => u.username === username)) {
+    return res.status(400).json({ message: 'Usuario ya existe' });
   }
+  users.push({ username, password });
+  res.json({ message: 'Usuario regsitrado correctamente' });
 });
 
 // login: { email, password } -> devuelve user id y tutorialSeen
-app.post('/api/login', (req, res) => {
-  const { email, password } = req.body;
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'email y password requeridos' });
-  const user = db.prepare('SELECT id, name, email, tutorialSeen FROM users WHERE email = ? AND password = ?').get(email, password);
-  if (!user) return res.status(401).json({ error: 'credenciales inválidas' });
-  res.json({ user });
+  const user = users.find(u => u.username === username && u.password === password);
+  if (!user){
+    return res.status(400).json({ message: 'Usuario o contraseña incorrecta' });
+  }
+  res.json({ message: 'Inicio de sesion exitoso' });
 });
 
 // marcar tutorial como visto: PUT /api/users/:id/tutorialSeen  { seen: true }

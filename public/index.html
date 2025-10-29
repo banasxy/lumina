@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lumina - Login</title>
+  <title>Lumina - Inicio</title>
   <style>
     :root {
       --azul-oscuro: #1A3C78;
@@ -63,34 +63,50 @@
   </style>
 </head>
 <body>
-  <div id="login-container">
-    <h2>Lumina</h2>
-    <input type="text" id="username" placeholder="Usuario">
-    <input type="password" id="pin" placeholder="PIN">
-    <button onclick="login()">Entrar</button>
-    <div id="error"></div>
-  </div>
+  <h1>Lumina</h1>
 
-  <script>
-    const USER = "Benjamin"; // usuario fijo
-    const PIN = "2580";      // PIN fijo
+  <h2>Registro</h2>
+  <form id="registerForm">
+    <input type="text" name="username" placeholder="Usuario" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <button type="submit">Registrarse</button>
+  </form>
 
-    function login() {
-      const username = document.getElementById("username").value;
-      const pin = document.getElementById("pin").value;
-      const error = document.getElementById("error");
+  <h2>Iniciar Sesión</h2>
+  <form id="loginForm">
+    <input type="text" name="username" placeholder="Usuario" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <button type="submit">Iniciar sesión</button>
+  </form>
 
-      if(username === USER && pin === PIN){
-        localStorage.setItem("loggedIn", "true");
-        window.location.href = "app.html";
-      } else {
-        error.textContent = "Usuario o PIN incorrecto";
-      }
-    }
+  <p id="message"></p>
 
-    if(localStorage.getItem("loggedIn") === "true"){
-      window.location.href = "app.html";
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+
+
+<form id="loginForm">
+  <input type="text" id="username" placeholder="Usuario" required>
+  <input type="password" id="password" placeholder="Contraseña" required>
+  <button type="submit">Iniciar sesión</button>
+</form>
+
+<p>¿No tienes cuenta? <a href="#" id="goToRegister">Regístrate aquí</a></p>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  const res = await fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+  const data = await res.json();
+  if (data.success) alert('Inicio de sesión correcto ✅');
+  else alert('Error: ' + data.message);
+});
+</script>

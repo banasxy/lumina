@@ -30,13 +30,12 @@ body.fondo {
 }
 
 .logo-grande {
-  width: 100px;
-  margin-bottom: 10px;
+  width: 120px; /* antes era 100px */
+  border-radius: 20px; /* opcional */
 }
 
 .logo-mini {
-  width: 50px;
-  margin-bottom: 15px;
+  width: 60px;
 }
 
 .titulo {

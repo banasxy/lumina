@@ -13,7 +13,7 @@
 
     <form id="gastoForm" class="formulario">
       <input type="number" id="monto" placeholder="Monto" step="0.01" required>
-      <select id="categoria">
+      <select id="categoria" required>
         <option value="">Categoría</option>
         <option>Comida</option>
         <option>Transporte</option>
@@ -22,8 +22,12 @@
         <option>Otros</option>
       </select>
       <textarea id="nota" placeholder="Notas (opcional)"></textarea>
-      <button type="submit" class="btn-negro">Volver al inicio</button>
+
+      <!-- Nuevo botón de confirmación -->
+      <button type="submit" class="btn-negro">Añadir gasto</button>
     </form>
+
+    <button class="btn-azul" onclick="window.location.href='dashboard.html'">Volver al inicio</button>
   </div>
 
   <script src="script.js"></script>

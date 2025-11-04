@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presupuesto | Lúmina</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="fondo">
+  <div class="contenedor-centro">
+    <img src="logo.png" class="logo-mini" alt="logo">
+    <h2>Presupuesto</h2>
+    <p>Define tu presupuesto mensual o semanal para controlar tus gastos.</p>
+
+    <form id="presupuestoForm" class="formulario">
+      <input type="number" id="montoPresupuesto" placeholder="Monto del presupuesto" step="0.01" required>
+      <select id="tipoPresupuesto">
+        <option value="">Selecciona tipo</option>
+        <option value="mensual">Mensual</option>
+        <option value="semanal">Semanal</option>
+      </select>
+      <button type="submit" class="btn-negro">Guardar presupuesto</button>
+    </form>
+
+    <button class="btn-azul" onclick="window.location.href='dashboard.html'">Volver al inicio</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

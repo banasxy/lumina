@@ -1,37 +1,108 @@
-body {
-  font-family: Arial, sans-serif;
+:root {
+  --color-fondo1: #0D3A77;
+  --color-fondo2: #1E62C6;
+  --color-boton: #4C8BE2;
+  --color-texto: #FFFFFF;
+  --color-negro: #000000;
+  --color-sombra: rgba(0,0,0,0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body.fondo {
+  height: 100vh;
+  background: linear-gradient(180deg, var(--color-fondo1), var(--color-fondo2));
+  color: var(--color-texto);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-centro {
   text-align: center;
-  background-color: #111;
-  color: white;
-  margin-top: 60px;
+  width: 90%;
+  max-width: 400px;
 }
 
-input, button, a {
-  margin: 8px;
-  padding: 10px;
-  border-radius: 5px;
+.logo-grande {
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+.logo-mini {
+  width: 50px;
+  margin-bottom: 15px;
+}
+
+.titulo {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.subtitulo {
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+.botones-columna {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.btn-azul {
+  background-color: var(--color-boton);
+  color: var(--color-texto);
   border: none;
-}
-
-input {
-  width: 200px;
-}
-
-button {
-  background-color: #6b46c1;
-  color: white;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  box-shadow: 0 4px 6px var(--color-sombra);
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.btn-azul:hover { transform: scale(1.05); }
+
+.btn-negro {
+  background-color: var(--color-negro);
+  color: var(--color-texto);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  box-shadow: 0 4px 6px var(--color-sombra);
+  cursor: pointer;
+  margin-top: 20px;
 }
 
-button:hover {
-  background-color: #805ad5;
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-a {
-  color: #9f7aea;
-  text-decoration: none;
+input, select, textarea {
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  background-color: #4C8BE2;
+  color: white;
+  box-shadow: 0 4px 6px var(--color-sombra);
 }
 
-a:hover {
-  text-decoration: underline;
+textarea {
+  resize: none;
+  height: 80px;
+}
+
+.lista-tutorial {
+  text-align: left;
+  margin: 15px 0;
+  line-height: 1.6;
 }

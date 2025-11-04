@@ -2,12 +2,30 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>App - Lumina</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Añadir gasto | Lúmina</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <h2>Aplicación principal</h2>
-  <p>Aquí va la parte principal de Lumina.</p>
-  <a href="/dashboard">Volver al panel</a>
+<body class="fondo">
+  <div class="contenedor-centro">
+    <img src="logo.png" class="logo-mini" alt="logo">
+    <h2>Añadir gasto</h2>
+
+    <form id="gastoForm" class="formulario">
+      <input type="number" id="monto" placeholder="Monto" step="0.01" required>
+      <select id="categoria">
+        <option value="">Categoría</option>
+        <option>Comida</option>
+        <option>Transporte</option>
+        <option>Entretenimiento</option>
+        <option>Salud</option>
+        <option>Otros</option>
+      </select>
+      <textarea id="nota" placeholder="Notas (opcional)"></textarea>
+      <button type="submit" class="btn-negro">Volver al inicio</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

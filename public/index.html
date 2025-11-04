@@ -2,13 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Lumina - Inicio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lúmina | Inicio</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-  <h1>Bienvenido a Lumina</h1>
-  <a href="/register">Registrarse</a> | 
-  <a href="/login">Iniciar Sesión</a> | 
-  <a href="/tutorial">Tutorial</a>
+<body class="fondo">
+  <div class="contenedor-centro">
+    <img src="logo.png" alt="Lúmina logo" class="logo-grande">
+    <h1 class="titulo">Lúmina</h1>
+    <p class="subtitulo">Administra tus gastos sin estrés</p>
+
+    <div class="botones-columna">
+      <button class="btn-azul" onclick="window.location.href='register.html'">Registrarse</button>
+      <button class="btn-azul" onclick="window.location.href='login.html'">Iniciar sesión</button>
+    </div>
+  </div>
 </body>
 </html>

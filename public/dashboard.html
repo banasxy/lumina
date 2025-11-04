@@ -2,16 +2,24 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard - Lumina</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio | Lúmina</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <h1>Panel de Lumina</h1>
-  <p id="welcome">Cargando usuario...</p>
+<body class="fondo">
+  <div class="contenedor-centro">
+    <img src="logo.png" class="logo-mini" alt="logo">
+    <h2>Inicio</h2>
+    <p>Hola, <span id="nombreUsuario">Génesis</span>!</p>
 
-  <a href="/app">Ir a la App</a> | 
-  <a href="/tutorial">Ver Tutorial</a> | 
-  <a href="/logout">Cerrar Sesión</a>
+    <div class="botones-columna">
+      <button class="btn-azul" onclick="window.location.href='app.html'">Añadir gasto</button>
+      <button class="btn-azul">Presupuesto</button>
+      <button class="btn-azul">Reporte semanal</button>
+      <button class="btn-azul" onclick="window.location.href='tutorial.html'">Tutorial</button>
+      <button class="btn-azul" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

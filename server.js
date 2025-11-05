@@ -1,83 +1,100 @@
+// ==========================
+// 🌟 LÚMINA - SERVER.JS 🌟
+// ==========================
+
 const express = require('express');
 const path = require('path');
-const session = require('express-session');
-const Database = require('./db');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const db = new Database(path.join(__dirname, 'usuarios.json'));
-
-// Middleware
-app.use(express.urlencoded({ extended: true }));
+// Middleware para leer JSON
 app.use(express.json());
+
+// 🔹 Servir todos los archivos estáticos desde /public
+// (esto incluye logo.png, styles.css, script.js, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configurar sesión
-app.use(session({
-  secret: 'lumina_secret_key',
-  resave: false,
-  saveUninitialized: true
-}));
+// ==========================
+// 📁 RUTAS PRINCIPALES
+// ==========================
 
-// Rutas principales
+// Página de inicio
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-// Registro
+// Página de registro
 app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/register.html'));
 });
 
-app.post('/register', (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) return res.send('Faltan datos.');
-
-  const users = db.getUsers();
-  if (users.find(u => u.username === username))
-    return res.send('Usuario ya existe. <a href="/register">Volver</a>');
-
-  db.addUser({ username, password });
-  res.redirect('/login');
-});
-
-// Login
+// Página de login
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/login.html'));
 });
 
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  const users = db.getUsers();
-  const user = users.find(u => u.username === username && u.password === password);
-
-  if (!user)
-    return res.send('Usuario o contraseña incorrecta. <a href="/login">Volver</a>');
-
-  req.session.user = username;
-  res.redirect('/dashboard');
-});
-
 // Dashboard
 app.get('/dashboard', (req, res) => {
-  if (!req.session.user) return res.redirect('/login');
   res.sendFile(path.join(__dirname, 'public/dashboard.html'));
 });
 
-// Obtener usuario en sesión
-app.get('/getUser', (req, res) => {
-  res.json({ user: req.session.user || null });
+// Añadir gasto
+app.get('/app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/app.html'));
 });
 
-// Logout
-app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/');
+// Presupuesto
+app.get('/presupuesto', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/presupuesto.html'));
 });
 
-// Páginas adicionales
-app.get('/app', (req, res) => res.sendFile(path.join(__dirname, 'public/app.html')));
-app.get('/tutorial', (req, res) => res.sendFile(path.join(__dirname, 'public/tutorial.html')));
+// Reporte semanal
+app.get('/reporte', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/reporte.html'));
+});
 
-app.listen(PORT, () => console.log(`✅ Lumina corriendo en http://localhost:${PORT}`));
+// Tutorial
+app.get('/tutorial', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/tutorial.html'));
+});
+
+// ==========================
+// 💾 SIMULACIÓN DE BASE LOCAL
+// ==========================
+
+// Rutas opcionales si luego decides conectar db.json o usuarios.json
+const dbFile = path.join(__dirname, 'usuarios.json');
+
+// Registrar nuevo usuario
+app.post('/api/register', (req, res) => {
+  const nuevoUsuario = req.body;
+  let usuarios = [];
+
+  if (fs.existsSync(dbFile)) {
+    usuarios = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+  }
+
+  usuarios.push(nuevoUsuario);
+  fs.writeFileSync(dbFile, JSON.stringify(usuarios, null, 2));
+
+  res.json({ message: 'Usuario registrado correctamente' });
+});
+
+// Obtener lista de usuarios
+app.get('/api/usuarios', (req, res) => {
+  if (fs.existsSync(dbFile)) {
+    const usuarios = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+    res.json(usuarios);
+  } else {
+    res.json([]);
+  }
+});
+
+// ==========================
+// 🚀 INICIO DEL SERVIDOR
+// ==========================
+app.listen(PORT, () => {
+  console.log(`✅ Servidor Lúmina activo en: http://localhost:${PORT}`);
+});

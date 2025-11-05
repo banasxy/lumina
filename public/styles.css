@@ -54,6 +54,18 @@ body.fondo {
   gap: 15px;
 }
 
+.contenedor-centro h2,
+.contenedor-centro p {
+  margin-bottom: 20px; /* separación entre título y texto */
+}
+
+#nombreUsuario {
+  display: block;
+  margin-bottom: 35px; /* 👈 aumenta el espacio entre el saludo y los botones */
+  font-size: 18px;
+  font-weight: 500;
+}
+
 .btn-azul {
   background-color: var(--color-boton);
   color: var(--color-texto);

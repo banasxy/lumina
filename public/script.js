@@ -1,23 +1,101 @@
-// ======================
-// LÚMINA - GESTOR DE GASTOS
-// ======================
+// ==========================
+// 🌟 LÚMINA - SCRIPT GLOBAL 🌟
+// ==========================
 
-// Cargar gastos del almacenamiento local
+// Cargar usuarios y gastos desde localStorage
+let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 let gastos = JSON.parse(localStorage.getItem("gastos")) || [];
+let usuarioActual = JSON.parse(localStorage.getItem("usuarioActual")) || null;
 
+// ==========================
+// 🔹 REGISTRO
+// ==========================
+const formRegistro = document.getElementById("formRegistro");
+
+formRegistro?.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const nombre = document.getElementById("nombre").value;
+  const correo = document.getElementById("correo").value;
+  const usuario = document.getElementById("usuario").value;
+  const contrasena = document.getElementById("contrasena").value;
+
+  const existe = usuarios.find((u) => u.usuario === usuario || u.correo === correo);
+  if (existe) {
+    alert("⚠️ Este usuario o correo ya está registrado.");
+    return;
+  }
+
+  const nuevoUsuario = { nombre, correo, usuario, contrasena };
+  usuarios.push(nuevoUsuario);
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+  alert("✅ Registro exitoso. Ahora inicia sesión.");
+  window.location.href = "login.html";
+});
+
+// ==========================
+// 🔹 INICIO DE SESIÓN
+// ==========================
+const formLogin = document.getElementById("formLogin");
+
+formLogin?.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const usuario = document.getElementById("usuarioLogin").value;
+  const contrasena = document.getElementById("contrasenaLogin").value;
+
+  const encontrado = usuarios.find(
+    (u) => (u.usuario === usuario || u.correo === usuario) && u.contrasena === contrasena
+  );
+
+  if (encontrado) {
+    localStorage.setItem("usuarioActual", JSON.stringify(encontrado));
+    window.location.href = "dashboard.html";
+  } else {
+    alert("❌ Usuario o contraseña incorrectos");
+  }
+});
+
+// ==========================
+// 🔹 DASHBOARD - BIENVENIDA
+// ==========================
+const nombreUsuario = document.getElementById("nombreUsuario");
+
+if (nombreUsuario && usuarioActual) {
+  nombreUsuario.textContent = `Hola, ${usuarioActual.nombre}!`;
+}
+
+// ==========================
+// 🔹 BOTÓN CERRAR SESIÓN
+// ==========================
+const btnCerrarSesion = document.getElementById("cerrarSesion");
+btnCerrarSesion?.addEventListener("click", () => {
+  localStorage.removeItem("usuarioActual");
+  window.location.href = "index.html";
+});
+
+// ==========================
+// 💰 GESTOR DE GASTOS
+// ==========================
 const form = document.getElementById("formGasto");
 const lista = document.getElementById("listaGastos");
 const graficoCanvas = document.getElementById("graficoGastos");
 let grafico;
 
-// Guardar gasto nuevo
 form?.addEventListener("submit", (e) => {
   e.preventDefault();
   const nombre = document.getElementById("nombreGasto").value;
   const monto = parseFloat(document.getElementById("montoGasto").value);
   const categoria = document.getElementById("categoriaGasto").value;
 
-  const nuevoGasto = { id: Date.now(), nombre, monto, categoria };
+  const nuevoGasto = {
+    id: Date.now(),
+    usuario: usuarioActual?.usuario || "invitado",
+    nombre,
+    monto,
+    categoria,
+  };
   gastos.push(nuevoGasto);
   localStorage.setItem("gastos", JSON.stringify(gastos));
 
@@ -26,11 +104,18 @@ form?.addEventListener("submit", (e) => {
   renderGrafico();
 });
 
-// Mostrar lista de gastos
+// ==========================
+// 🔹 MOSTRAR LISTA DE GASTOS
+// ==========================
 function renderGastos() {
   if (!lista) return;
+
   lista.innerHTML = "";
-  gastos.forEach((g) => {
+  const gastosUsuario = gastos.filter(
+    (g) => g.usuario === usuarioActual?.usuario
+  );
+
+  gastosUsuario.forEach((g) => {
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${g.nombre}</strong> - $${g.monto} (${g.categoria})
@@ -41,7 +126,9 @@ function renderGastos() {
   });
 }
 
-// Editar gasto
+// ==========================
+// 🔹 EDITAR / ELIMINAR GASTOS
+// ==========================
 function editarGasto(id) {
   const gasto = gastos.find((g) => g.id === id);
   const nuevoNombre = prompt("Nuevo nombre:", gasto.nombre);
@@ -58,7 +145,6 @@ function editarGasto(id) {
   }
 }
 
-// Eliminar gasto
 function eliminarGasto(id) {
   gastos = gastos.filter((g) => g.id !== id);
   localStorage.setItem("gastos", JSON.stringify(gastos));
@@ -66,11 +152,17 @@ function eliminarGasto(id) {
   renderGrafico();
 }
 
-// Gráfico de distribución por categoría
+// ==========================
+// 📊 GRÁFICO DE GASTOS
+// ==========================
 function renderGrafico() {
   if (!graficoCanvas) return;
+  const gastosUsuario = gastos.filter(
+    (g) => g.usuario === usuarioActual?.usuario
+  );
+
   const categorias = {};
-  gastos.forEach((g) => {
+  gastosUsuario.forEach((g) => {
     categorias[g.categoria] = (categorias[g.categoria] || 0) + g.monto;
   });
 
@@ -99,5 +191,8 @@ function renderGrafico() {
   });
 }
 
+// ==========================
+// 🔹 INICIALIZAR SI EXISTE FORM
+// ==========================
 renderGastos();
 renderGrafico();

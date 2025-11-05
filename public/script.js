@@ -1,133 +1,103 @@
-// --- FORMULARIOS ---
-const registerForm = document.getElementById('registerForm');
-const loginForm = document.getElementById('loginForm');
-const gastoForm = document.getElementById('gastoForm');
-const presupuestoForm = document.getElementById('presupuestoForm');
+// ======================
+// LÚMINA - GESTOR DE GASTOS
+// ======================
 
-// --- REGISTRO ---
-if (registerForm) {
-  registerForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nombre = document.getElementById('nombre').value;
-    localStorage.setItem('usuarioActual', nombre);
-    window.location.href = 'tutorial.html';
+// Cargar gastos del almacenamiento local
+let gastos = JSON.parse(localStorage.getItem("gastos")) || [];
+
+const form = document.getElementById("formGasto");
+const lista = document.getElementById("listaGastos");
+const graficoCanvas = document.getElementById("graficoGastos");
+let grafico;
+
+// Guardar gasto nuevo
+form?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById("nombreGasto").value;
+  const monto = parseFloat(document.getElementById("montoGasto").value);
+  const categoria = document.getElementById("categoriaGasto").value;
+
+  const nuevoGasto = { id: Date.now(), nombre, monto, categoria };
+  gastos.push(nuevoGasto);
+  localStorage.setItem("gastos", JSON.stringify(gastos));
+
+  form.reset();
+  renderGastos();
+  renderGrafico();
+});
+
+// Mostrar lista de gastos
+function renderGastos() {
+  if (!lista) return;
+  lista.innerHTML = "";
+  gastos.forEach((g) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${g.nombre}</strong> - $${g.monto} (${g.categoria})
+      <button class="editar" onclick="editarGasto(${g.id})">✏️</button>
+      <button class="eliminar" onclick="eliminarGasto(${g.id})">🗑️</button>
+    `;
+    lista.appendChild(li);
   });
 }
 
-// --- LOGIN ---
-if (loginForm) {
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const usuario = document.getElementById('usuario').value;
-    localStorage.setItem('usuarioActual', usuario);
-    window.location.href = 'dashboard.html';
-  });
-}
+// Editar gasto
+function editarGasto(id) {
+  const gasto = gastos.find((g) => g.id === id);
+  const nuevoNombre = prompt("Nuevo nombre:", gasto.nombre);
+  const nuevoMonto = parseFloat(prompt("Nuevo monto:", gasto.monto));
+  const nuevaCategoria = prompt("Nueva categoría:", gasto.categoria);
 
-// --- DASHBOARD ---
-const nombreUsuario = document.getElementById('nombreUsuario');
-if (nombreUsuario) {
-  const nombre = localStorage.getItem('usuarioActual');
-  nombreUsuario.textContent = nombre ? nombre : 'Usuario';
-}
-
-// --- AÑADIR GASTO ---
-if (gastoForm) {
-  gastoForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const monto = parseFloat(document.getElementById('monto').value);
-    const categoria = document.getElementById('categoria').value;
-    const nota = document.getElementById('nota').value;
-
-    const nuevoGasto = { monto, categoria, nota, fecha: new Date().toLocaleDateString() };
-
-    let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-    gastos.push(nuevoGasto);
-    localStorage.setItem('gastos', JSON.stringify(gastos));
-
-    window.location.href = 'reporte.html';
-  });
-}
-
-// --- PRESUPUESTO ---
-if (presupuestoForm) {
-  presupuestoForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const monto = parseFloat(document.getElementById('montoPresupuesto').value);
-    const tipo = document.getElementById('tipoPresupuesto').value;
-
-    const presupuesto = { monto, tipo };
-    localStorage.setItem('presupuesto', JSON.stringify(presupuesto));
-
-    window.location.href = 'dashboard.html';
-  });
-}
-
-// --- REPORTE ---
-const reporteGastos = document.getElementById('reporteGastos');
-const graficoGastos = document.getElementById('graficoGastos');
-
-if (reporteGastos && graficoGastos) {
-  const gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-
-  // Mostrar lista
-  if (gastos.length === 0) {
-    reporteGastos.innerHTML = "<p>No hay gastos registrados aún.</p>";
-  } else {
-    gastos.forEach((gasto) => {
-      const div = document.createElement('div');
-      div.className = 'card-gasto';
-      div.innerHTML = `
-        <strong>${gasto.categoria}</strong><br>
-        $${gasto.monto.toFixed(2)} — ${gasto.fecha}<br>
-        <small>${gasto.nota || ''}</small>
-      `;
-      reporteGastos.appendChild(div);
-    });
+  if (nuevoNombre && nuevoMonto && nuevaCategoria) {
+    gasto.nombre = nuevoNombre;
+    gasto.monto = nuevoMonto;
+    gasto.categoria = nuevaCategoria;
+    localStorage.setItem("gastos", JSON.stringify(gastos));
+    renderGastos();
+    renderGrafico();
   }
+}
 
-  // Agrupar por categoría para el gráfico
+// Eliminar gasto
+function eliminarGasto(id) {
+  gastos = gastos.filter((g) => g.id !== id);
+  localStorage.setItem("gastos", JSON.stringify(gastos));
+  renderGastos();
+  renderGrafico();
+}
+
+// Gráfico de distribución por categoría
+function renderGrafico() {
+  if (!graficoCanvas) return;
   const categorias = {};
-  gastos.forEach(g => {
+  gastos.forEach((g) => {
     categorias[g.categoria] = (categorias[g.categoria] || 0) + g.monto;
   });
 
   const labels = Object.keys(categorias);
   const data = Object.values(categorias);
 
-  // Colores para el gráfico
-  const colores = [
-    '#4C8BE2', '#6BA4E7', '#88B9F1', '#A7CBF8', '#C5DDFE', '#EDF3FF'
-  ];
-
-  // Crear el gráfico circular
-  new Chart(graficoGastos, {
-    type: 'pie',
+  if (grafico) grafico.destroy();
+  grafico = new Chart(graficoCanvas, {
+    type: "pie",
     data: {
-      labels: labels,
-      datasets: [{
-        label: 'Gastos por categoría',
-        data: data,
-        backgroundColor: colores,
-        borderColor: '#fff',
-        borderWidth: 2
-      }]
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: ["#42A5F5", "#66BB6A", "#FFA726", "#EF5350", "#AB47BC"],
+        },
+      ],
     },
     options: {
-      responsive: true,
       plugins: {
         legend: {
-          labels: { color: 'white', font: { size: 14 } }
-        }
-      }
-    }
+          position: "bottom",
+        },
+      },
+    },
   });
 }
 
-// --- CERRAR SESIÓN ---
-function cerrarSesion() {
-  localStorage.removeItem('usuarioActual');
-  window.location.href = 'index.html';
-}
+renderGastos();
+renderGrafico();

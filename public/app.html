@@ -1,35 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Añadir gasto | Lúmina</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Añadir gasto - Lúmina</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="fondo">
   <div class="contenedor-centro">
-    <img src="logo.png" class="logo-mini" alt="logo">
+    <img src="logo.png" alt="logo" class="logo-mini" />
     <h2>Añadir gasto</h2>
 
-    <form id="gastoForm" class="formulario">
-      <input type="number" id="monto" placeholder="Monto" step="0.01" required>
-      <select id="categoria" required>
+    <form id="formGasto">
+      <input type="text" id="nombreGasto" placeholder="Nombre del gasto" required />
+      <input type="number" id="montoGasto" placeholder="Monto" required />
+      <select id="categoriaGasto" required>
         <option value="">Categoría</option>
-        <option>Comida</option>
-        <option>Transporte</option>
-        <option>Entretenimiento</option>
-        <option>Salud</option>
-        <option>Otros</option>
+        <option value="Comida">🍔 Comida</option>
+        <option value="Transporte">🚌 Transporte</option>
+        <option value="Entretenimiento">🎮 Entretenimiento</option>
+        <option value="Salud">💊 Salud</option>
+        <option value="Otros">💡 Otros</option>
       </select>
-      <textarea id="nota" placeholder="Notas (opcional)"></textarea>
-
-      <!-- Nuevo botón de confirmación -->
-      <button type="submit" class="btn-negro">Añadir gasto</button>
+      <button type="submit" class="btn">Añadir gasto</button>
     </form>
 
-    <button class="btn-azul" onclick="window.location.href='dashboard.html'">Volver al inicio</button>
-  </div>
+    <h3>Lista de gastos</h3>
+    <ul id="listaGastos"></ul>
 
+    <h3>Distribución de gastos</h3>
+    <canvas id="graficoGastos" width="400" height="300"></canvas>
+
+    <button onclick="window.location.href='dashboard.html'" class="btn-volver">Volver al inicio</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

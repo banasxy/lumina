@@ -122,3 +122,42 @@ function renderGrafico() {
 }
 renderGastos();
 renderGrafico();
+
+// ==========================
+// 💸 PRESUPUESTO
+// ==========================
+const formPresupuesto = document.getElementById("formPresupuesto");
+const montoPresupuesto = document.getElementById("montoPresupuesto");
+const presupuestoTotal = document.getElementById("presupuestoTotal");
+const gastoActual = document.getElementById("gastoActual");
+const saldoDisponible = document.getElementById("saldoDisponible");
+
+if (formPresupuesto) {
+  const usuario = usuarioActual?.usuario;
+  let presupuesto = JSON.parse(localStorage.getItem("presupuesto")) || {};
+  let gastoUsuario = gastos.filter((g) => g.usuario === usuario)
+    .reduce((acc, g) => acc + g.monto, 0);
+
+  // Mostrar presupuesto guardado si existe
+  if (presupuesto[usuario]) {
+    presupuestoTotal.textContent = presupuesto[usuario];
+    gastoActual.textContent = gastoUsuario;
+    saldoDisponible.textContent = presupuesto[usuario] - gastoUsuario;
+  }
+
+  formPresupuesto.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const valor = parseFloat(montoPresupuesto.value);
+    if (!valor) return;
+    presupuesto[usuario] = valor;
+    localStorage.setItem("presupuesto", JSON.stringify(presupuesto));
+    alert("✅ Presupuesto guardado correctamente.");
+    window.location.reload();
+  });
+}
+
+// ==========================
+// 📊 GRAFICO EN PÁGINA SEPARADA
+// ==========================
+const graficoPagina = document.getElementById("graficoGastos");
+if (graficoPagina) renderGrafico();

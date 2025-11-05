@@ -12,10 +12,16 @@
     <h2>Reporte semanal</h2>
     <p>Resumen de tus gastos recientes:</p>
 
+    <!-- 📊 Contenedor para el gráfico -->
+    <canvas id="graficoGastos" width="300" height="300"></canvas>
+
     <div id="reporteGastos" class="reporte"></div>
 
     <button class="btn-azul" onclick="window.location.href='dashboard.html'">Volver al inicio</button>
   </div>
+
+  <!-- Importamos Chart.js y el script general -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

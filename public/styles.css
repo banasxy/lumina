@@ -121,3 +121,11 @@ textarea {
   padding: 10px;
   margin-bottom: 10px;
 }
+
+canvas#graficoGastos {
+  margin: 20px auto;
+  max-width: 320px;
+  background-color: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 15px;
+}

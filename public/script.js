@@ -46,25 +46,39 @@ btnCerrarSesion?.addEventListener("click", () => {
   window.location.href = "index.html";
 });
 
-// GASTOS
+
+// ==========================
+// 💰 GESTOR DE GASTOS (SIN ALERTS)
+// ==========================
 const form = document.getElementById("formGasto");
 const lista = document.getElementById("listaGastos");
-const graficoCanvas = document.getElementById("graficoGastos");
-let grafico;
+const mensajeExito = document.getElementById("mensajeExito");
 
 form?.addEventListener("submit", (e) => {
   e.preventDefault();
   const nombre = document.getElementById("nombreGasto").value;
   const monto = parseFloat(document.getElementById("montoGasto").value);
   const categoria = document.getElementById("categoriaGasto").value;
-  const nuevoGasto = { id: Date.now(), usuario: usuarioActual?.usuario || "invitado", nombre, monto, categoria };
+
+  if (!nombre || !monto || !categoria) return;
+
+  const nuevoGasto = {
+    id: Date.now(),
+    usuario: usuarioActual?.usuario || "invitado",
+    nombre,
+    monto,
+    categoria,
+  };
+
   gastos.push(nuevoGasto);
   localStorage.setItem("gastos", JSON.stringify(gastos));
   form.reset();
   renderGastos();
-  renderGrafico();
+
+  mostrarMensaje("✅ Gasto añadido correctamente");
 });
 
+// Mostrar lista de gastos
 function renderGastos() {
   if (!lista) return;
   lista.innerHTML = "";
@@ -84,13 +98,14 @@ function editarGasto(id) {
   const nuevoNombre = prompt("Nuevo nombre:", gasto.nombre);
   const nuevoMonto = parseFloat(prompt("Nuevo monto:", gasto.monto));
   const nuevaCategoria = prompt("Nueva categoría:", gasto.categoria);
+
   if (nuevoNombre && nuevoMonto && nuevaCategoria) {
     gasto.nombre = nuevoNombre;
     gasto.monto = nuevoMonto;
     gasto.categoria = nuevaCategoria;
     localStorage.setItem("gastos", JSON.stringify(gastos));
     renderGastos();
-    renderGrafico();
+    mostrarMensaje("✏️ Gasto actualizado");
   }
 }
 
@@ -98,8 +113,19 @@ function eliminarGasto(id) {
   gastos = gastos.filter((g) => g.id !== id);
   localStorage.setItem("gastos", JSON.stringify(gastos));
   renderGastos();
-  renderGrafico();
+  mostrarMensaje("🗑️ Gasto eliminado");
 }
+
+// Mensaje visual temporal
+function mostrarMensaje(texto) {
+  if (!mensajeExito) return;
+  mensajeExito.textContent = texto;
+  mensajeExito.style.opacity = "1";
+  setTimeout(() => (mensajeExito.style.opacity = "0"), 2000);
+}
+
+renderGastos();
+
 
 function renderGrafico() {
   if (!graficoCanvas) return;

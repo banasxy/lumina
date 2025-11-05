@@ -14,13 +14,15 @@
   font-family: 'Poppins', sans-serif;
 }
 
-body.fondo {
-  height: 100vh;
-  background: linear-gradient(180deg, var(--color-fondo1), var(--color-fondo2));
-  color: var(--color-texto);
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(180deg, #0d47a1 0%, #1976d2 100%);
+  color: white;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
 }
 
 .contenedor-centro {
@@ -35,7 +37,13 @@ body.fondo {
 }
 
 .logo-mini {
-  width: 60px;
+  width: 140px;              /* 🔹 más grande */
+  height: auto;
+  display: block;
+  margin: 0 auto 25px;       /* 🔹 centrado y con espacio debajo */
+  border-radius: 20px;       /* 🔹 esquinas suaves como en Figma */
+  background-color: transparent; /* 🔹 quita el fondo oscuro */
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); /* 🔹 sombra leve elegante */
 }
 
 .titulo {

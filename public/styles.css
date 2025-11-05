@@ -1,155 +1,159 @@
-:root {
-  --color-fondo1: #0D3A77;
-  --color-fondo2: #1E62C6;
-  --color-boton: #4C8BE2;
-  --color-texto: #FFFFFF;
-  --color-negro: #000000;
-  --color-sombra: rgba(0,0,0,0.25);
-}
+/* ===========================
+   🌟 LÚMINA - ESTILO MODERNO
+   =========================== */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
+/* Fondo general */
+body,
+body.fondo {
+  font-family: "Poppins", sans-serif;
   background: linear-gradient(180deg, #0d47a1 0%, #1976d2 100%);
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
   margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Contenedor principal centrado */
 .contenedor-centro {
   text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 40px 35px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 400px;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
-.logo-grande {
-  width: 120px; /* antes era 100px */
-  border-radius: 20px; /* opcional */
-}
-
+/* Logo principal */
 .logo-mini {
-  width: 140px;              /* 🔹 más grande */
+  width: 130px;
   height: auto;
   display: block;
-  margin: 0 auto 25px;       /* 🔹 centrado y con espacio debajo */
-  border-radius: 20px;       /* 🔹 esquinas suaves como en Figma */
-  background-color: transparent; /* 🔹 quita el fondo oscuro */
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); /* 🔹 sombra leve elegante */
+  margin: 0 auto 20px auto;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
 }
 
-.titulo {
-  font-size: 32px;
-  font-weight: 700;
+/* Encabezados */
+h1, h2, h3 {
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
-.subtitulo {
-  font-size: 15px;
-  margin-bottom: 30px;
-}
-
-.botones-columna {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.contenedor-centro h2,
-.contenedor-centro p {
-  margin-bottom: 20px; /* separación entre título y texto */
-}
-
-#nombreUsuario {
-  display: block;
-  margin-bottom: 35px; /* 👈 aumenta el espacio entre el saludo y los botones */
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.btn-azul {
-  background-color: var(--color-boton);
-  color: var(--color-texto);
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 16px;
-  box-shadow: 0 4px 6px var(--color-sombra);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.btn-azul:hover { transform: scale(1.05); }
-
-.btn-negro {
-  background-color: var(--color-negro);
-  color: var(--color-texto);
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 16px;
-  box-shadow: 0 4px 6px var(--color-sombra);
-  cursor: pointer;
-  margin-top: 20px;
-}
-
+/* Formularios */
 .formulario {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-top: 15px;
 }
 
-input, select, textarea {
+input,
+select {
+  padding: 12px;
   border: none;
   border-radius: 10px;
-  padding: 12px;
-  font-size: 15px;
-  background-color: #4C8BE2;
+  font-size: 1em;
+  text-align: center;
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  box-shadow: 0 4px 6px var(--color-sombra);
+  transition: 0.3s;
 }
 
-textarea {
-  resize: none;
-  height: 80px;
+input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.lista-tutorial {
-  text-align: left;
-  margin: 15px 0;
-  line-height: 1.6;
+input:focus,
+select:focus {
+  background: rgba(255, 255, 255, 0.3);
 }
 
-.reporte {
-  background-color: rgba(255,255,255,0.1);
-  padding: 15px;
+/* Botones */
+.btn,
+.btn-negro,
+.btn-volver {
+  padding: 12px 20px;
   border-radius: 12px;
-  max-height: 400px;
-  overflow-y: auto;
-  text-align: left;
+  border: none;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s ease-in-out;
+  width: 100%;
 }
 
-.card-gasto {
-  background-color: rgba(255,255,255,0.15);
+.btn {
+  background: linear-gradient(90deg, #2196f3, #42a5f5);
+  color: white;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(66, 165, 245, 0.5);
+}
+
+.btn-negro {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+
+.btn-negro:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.03);
+}
+
+.btn-volver {
+  margin-top: 25px;
+  background: transparent;
+  color: #bbdefb;
+  border: 1px solid #90caf9;
+}
+
+.btn-volver:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Header del dashboard */
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.logo-peque {
+  width: 60px;
+  border-radius: 12px;
+}
+
+.btn-salir {
+  background: #ef5350;
+  color: white;
+  border: none;
+  padding: 10px 16px;
   border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-canvas#graficoGastos {
-  margin: 20px auto;
-  max-width: 320px;
-  background-color: rgba(255,255,255,0.1);
-  padding: 10px;
-  border-radius: 15px;
+.btn-salir:hover {
+  background: #e53935;
+  transform: scale(1.05);
 }
 
+/* Lista de gastos */
 #listaGastos {
   list-style: none;
   padding: 0;
@@ -157,13 +161,18 @@ canvas#graficoGastos {
 }
 
 #listaGastos li {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   margin: 8px 0;
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: 0.2s;
+}
+
+#listaGastos li:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 #listaGastos button {
@@ -173,12 +182,35 @@ canvas#graficoGastos {
   font-size: 1.1em;
 }
 
-.editar:hover { color: #4caf50; }
-.eliminar:hover { color: #f44336; }
+.editar:hover {
+  color: #4caf50;
+}
 
+.eliminar:hover {
+  color: #f44336;
+}
+
+/* Gráfico */
 canvas {
   margin-top: 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 10px;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
 }

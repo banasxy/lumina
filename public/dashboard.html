@@ -3,24 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio | Lúmina</title>
+  <title>Dashboard | Lúmina</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="fondo">
-  <div class="contenedor-centro">
-    <img src="logo.png" class="logo-mini" alt="logo">
-    <h2>Inicio</h2>
-    <p>Hola, <span id="nombreUsuario">Génesis</span>!</p>
+  <header class="header">
+    <img src="logo.png" class="logo-peque" alt="logo">
+    <h2 id="nombreUsuario">Hola, Usuario</h2>
+    <button id="cerrarSesion" class="btn-salir">Cerrar sesión</button>
+  </header>
 
-    <div class="botones-columna">
-  <button class="btn-azul" onclick="window.location.href='app.html'">Añadir gasto</button>
-  <button class="btn-azul" onclick="window.location.href='presupuesto.html'">Presupuesto</button>
-  <button class="btn-azul" onclick="window.location.href='reporte.html'">Reporte semanal</button>
-  <button class="btn-azul" onclick="window.location.href='tutorial.html'">Tutorial</button>
-  <button class="btn-azul" onclick="cerrarSesion()">Cerrar sesión</button>
-</div>
+  <div class="contenedor-centro">
+    <button class="btn" onclick="window.location.href='app.html'">Añadir gasto</button>
+    <button class="btn" onclick="window.location.href='tutorial.html'">Ver tutorial</button>
   </div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
